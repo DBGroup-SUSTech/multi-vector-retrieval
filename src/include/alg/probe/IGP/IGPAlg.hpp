@@ -83,6 +83,21 @@ namespace VectorSetSearch
             this->_qvec_n_refine_l.resize(n_item, 0);
         }
 
+        void build_graph_index()
+        {
+            _probe_controller._pg_probe.build_hnsw();
+        }
+
+        void save_graph_index(const std::string index_filename)
+        {
+            _probe_controller._pg_probe.save_hnsw(index_filename);
+        }
+
+        void load_graph_index(const std::string index_filename)
+        {
+            _probe_controller._pg_probe.load_hnsw(index_filename);
+        }
+
         void set_retrieval_parameter(
             const uint32_t query_n_vecs, const uint32_t topk,
             const size_t n_neighborhood_fetch, const uint32_t probe_topk,
@@ -240,6 +255,10 @@ namespace VectorSetSearch
             }
             assert(n_refine_query_item == _n_refine_item);
 #endif
+        }
+
+        void saveIndex(const std::string filename)
+        {
         }
     };
 }

@@ -537,6 +537,6 @@ def retrieval_end2end_batch(username: str, dataset: str, topk: int, search_confi
 
 
 if __name__ == '__main__':
-    username = 'username1'
+    username = 'bianzheng'
     dataset = 'lotte-small'
     build_index_official(username=username, dataset=dataset)

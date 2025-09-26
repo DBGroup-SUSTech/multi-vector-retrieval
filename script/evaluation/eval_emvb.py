@@ -189,7 +189,7 @@ if __name__ == '__main__':
     # default value {'n_centroid_f': lambda x: int(2 ** np.floor(np.log2(16 * np.sqrt(x))))},
     config_l = {
         'dbg': {
-            'username': 'username2',
+            'username': 'zhengbian',
             'dataset_l': ['msmacro', 'lotte'],
             'topk_l': [10],
             'is_debug': False,
@@ -232,7 +232,7 @@ if __name__ == '__main__':
             }
         },
         'local': {
-            'username': 'username1',
+            'username': 'bianzheng',
             # 'dataset_l': ['fake-normal', 'lotte-500-gnd'],
             'dataset_l': ['lotte-500-gnd'],
             # 'dataset_l': ['lotte-lifestyle'],

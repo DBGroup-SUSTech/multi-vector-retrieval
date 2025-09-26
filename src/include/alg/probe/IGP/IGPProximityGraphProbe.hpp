@@ -33,7 +33,8 @@ namespace VectorSetSearch
         std::unique_ptr<hnswlib_probe::InnerProductSpace> _ip_space;
         std::unique_ptr<hnswlib_probe::HierarchicalNSW<float>> _hnsw_index;
         std::vector<uint32_t> _n_sort_l; // query_n_vec, # sorted element for each query vector, default value: 0
-        std::vector<uint32_t> _current_nprobe_l; // query_n_vec, # element we have probed for each query vector, default value: 0
+        std::vector<uint32_t> _current_nprobe_l;
+        // query_n_vec, # element we have probed for each query vector, default value: 0
 
         IGPProximityGraphProbe() = default;
 
@@ -45,33 +46,41 @@ namespace VectorSetSearch
             this->_centroid_l = centroid_l;
             this->_n_centroid = n_centroid;
             this->_vec_dim = vec_dim;
-
-            build_hnsw(centroid_l, _n_centroid, vec_dim);
         }
 
-        void build_hnsw(const float* centroid_l,
-                        const uint32_t n_centroid, const uint32_t vec_dim)
+        void build_hnsw()
         {
-            const size_t max_element = n_centroid;
+            const size_t max_element = _n_centroid;
             const uint32_t M = 32;
             const uint32_t efConstruction = 200;
-            _ip_space = std::make_unique<hnswlib_probe::InnerProductSpace>(vec_dim);
+            _ip_space = std::make_unique<hnswlib_probe::InnerProductSpace>(_vec_dim);
             _hnsw_index = std::make_unique<hnswlib_probe::HierarchicalNSW<float>>(_ip_space.get(),
                 max_element, M, efConstruction);
 
             if (_hnsw_index->cur_element_count == 0)
             {
                 const uint32_t centID = 0;
-                const float* centroid = centroid_l + centID * vec_dim;
+                const float* centroid = _centroid_l + centID * _vec_dim;
                 _hnsw_index->addPoint((void*)centroid, centID);
             }
 
             // #pragma omp parallel for ordered default(none) shared(centroid_l, vec_dim)
             for (uint32_t centID = 1; centID < _n_centroid; centID++)
             {
-                const float* centroid = centroid_l + centID * vec_dim;
+                const float* centroid = _centroid_l + centID * _vec_dim;
                 _hnsw_index->addPoint((void*)centroid, centID);
             }
+        }
+
+        void save_hnsw(const std::string filename) {
+            _hnsw_index->saveIndex(filename);
+        }
+
+        void load_hnsw(const std::string filename) {
+            _ip_space = std::make_unique<hnswlib_probe::InnerProductSpace>(_vec_dim);
+            _hnsw_index = std::make_unique<hnswlib_probe::HierarchicalNSW<float>>(
+                _ip_space.get(),
+                filename, _n_centroid);
         }
 
         void set_query_info(const uint32_t query_n_vecs)
@@ -114,9 +123,9 @@ namespace VectorSetSearch
 
             const uint32_t n_sort = current_n_sort;
             const uint32_t n_sort_after = std::min(n_sort + _hnsw_index->topk_per_batch_, _n_centroid);
-            if(!(n_sort_after <= _hnsw_index->finish_topk_l_[qvecID]))
+            if (!(n_sort_after <= _hnsw_index->finish_topk_l_[qvecID]))
             {
-                printf("n_sort_after = %lu, finish_topk_l_ %d\n", n_sort_after, _hnsw_index->finish_topk_l_[qvecID]);
+                printf("n_sort_after = %u, finish_topk_l_ %d\n", n_sort_after, _hnsw_index->finish_topk_l_[qvecID]);
             }
             assert(n_sort_after <= _hnsw_index->finish_topk_l_[qvecID]);
 

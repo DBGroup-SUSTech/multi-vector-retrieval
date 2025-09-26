@@ -67,6 +67,6 @@ def process_index(username: str, dataset: str, rootpath: str):
 
 
 if __name__ == '__main__':
-    username = 'username1'
+    username = 'bianzheng'
     dataset = 'lotte-small'
     process_index(username=username, dataset=dataset, rootpath=rootpath)

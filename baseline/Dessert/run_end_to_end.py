@@ -102,6 +102,6 @@ def retrieval(username: str, dataset: str,
 
 
 if __name__ == '__main__':
-    username = 'username1'
+    username = 'bianzheng'
     dataset = 'lotte-small'
     # run(username=username, dataset=dataset)

@@ -55,6 +55,10 @@ namespace hnswlib_probe
         {
         }
 
+        HierarchicalNSW(SpaceInterface<dist_t> *s, const string &location, const uint32_t max_ele): ll_locks(max_ele){
+            LoadIndex(location, s);
+        }
+
         HierarchicalNSW(SpaceInterface<dist_t>* s, size_t maxElements, size_t M, size_t efConstruction) :
             ll_locks(maxElements), elementLevels(maxElements)
         {
@@ -117,14 +121,12 @@ namespace hnswlib_probe
         size_t maxM_;
         size_t maxM0_;
         size_t efConstruction_;
-        int delaunay_type_;
         double mult_, revSize_;
         int maxlevel_;
 
 
         VisitedListPool* visitedlistpool;
         mutex cur_element_count_guard_;
-        mutex MaxLevelGuard_;
         vector<mutex> ll_locks;
         tableint enterpoint_node;
 
@@ -984,5 +986,98 @@ namespace hnswlib_probe
                 qvec_visited_point_l,
                 qvec_visited_out_neighbor_l);
         };
+
+        void saveIndex(const std::string& filename) {
+            cout << "Saving index to " << filename.c_str() << "\n";
+            std::ofstream output(filename, std::ios::binary);
+            streampos position;
+
+            writeBinaryPOD(output, maxelements_);
+            writeBinaryPOD(output, cur_element_count);
+            writeBinaryPOD(output, size_data_per_element_);
+            writeBinaryPOD(output, size_links_per_element_);
+
+            writeBinaryPOD(output, M_);
+            writeBinaryPOD(output, maxM_);
+            writeBinaryPOD(output, maxM0_);
+            writeBinaryPOD(output, efConstruction_);
+            writeBinaryPOD(output, mult_);
+            writeBinaryPOD(output, revSize_);
+            writeBinaryPOD(output, maxlevel_);
+
+            writeBinaryPOD(output, enterpoint_node);
+            writeBinaryPOD(output, dist_calc);
+            writeBinaryPOD(output, size_links_level0_);
+            writeBinaryPOD(output, offsetData_);
+            writeBinaryPOD(output, offsetLevel0_);
+
+            output.write(data_level0_memory_, maxelements_ * size_data_per_element_);
+
+            for (size_t i = 0; i < maxelements_; i++) {
+                unsigned int linkListSize = elementLevels[i] > 0 ? size_links_per_element_ * elementLevels[i] : 0;
+                writeBinaryPOD(output, linkListSize);
+                if (linkListSize)
+                    output.write(linkLists_[i], linkListSize);
+            }
+            output.close();
+        }
+
+        void LoadIndex(const string &location, SpaceInterface<dist_t> *s) {
+            cout << "Loading index from " << location << "\n";
+            std::ifstream input(location, std::ios::binary);
+            streampos position;
+
+            readBinaryPOD(input, maxelements_);
+            readBinaryPOD(input, cur_element_count);
+            readBinaryPOD(input, size_data_per_element_);
+            readBinaryPOD(input, size_links_per_element_);
+
+            readBinaryPOD(input, M_);
+            readBinaryPOD(input, maxM_);
+            readBinaryPOD(input, maxM0_);
+            readBinaryPOD(input, efConstruction_);
+            readBinaryPOD(input, mult_);
+            readBinaryPOD(input, revSize_);
+            readBinaryPOD(input, maxlevel_);
+
+            readBinaryPOD(input, enterpoint_node);
+            readBinaryPOD(input, dist_calc);
+            readBinaryPOD(input, size_links_level0_);
+            readBinaryPOD(input, offsetData_);
+            readBinaryPOD(input, offsetLevel0_);
+
+            data_size_ = s->get_data_size();
+            label_offset_ = size_links_level0_ + data_size_;
+            fstdistfunc_ = s->get_dist_func();
+            dist_func_param_ = s->get_dist_func_param();
+
+            data_level0_memory_ = (char *) malloc(maxelements_ * size_data_per_element_);
+            input.read(data_level0_memory_, maxelements_ * size_data_per_element_);
+
+            size_links_per_element_ = maxM_ * sizeof(tableint) + sizeof(linklistsizeint);
+
+            visitedlistpool = new VisitedListPool(1, maxelements_);
+
+
+            linkLists_ = (char **) malloc(sizeof(void *) * maxelements_);
+            elementLevels = vector<int>(maxelements_);
+            revSize_ = 1.0 / mult_;
+            for (size_t i = 0; i < maxelements_; i++) {
+                unsigned int linkListSize;
+                readBinaryPOD(input, linkListSize);
+                if (linkListSize == 0) {
+                    elementLevels[i] = 0;
+
+                    linkLists_[i] = nullptr;
+                } else {
+                    elementLevels[i] = linkListSize / size_links_per_element_;
+                    linkLists_[i] = (char *) malloc(linkListSize);
+                    input.read(linkLists_[i], linkListSize);
+                }
+            }
+
+            input.close();
+        }
+
     };
 }

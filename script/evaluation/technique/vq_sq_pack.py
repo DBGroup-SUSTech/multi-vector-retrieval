@@ -38,9 +38,11 @@ def compute_assignment(username: str, dataset: str,
     doclens = np.load(os.path.join(embedding_dir, 'doclens.npy'))
     n_vec = int(np.sum(doclens))
     vq_code_l = torch.empty((n_vec), dtype=torch.int32)
-    residual_norm_l = np.empty((n_vec), dtype=np.float32)
 
-    residual_code_l = np.empty(shape=(n_vec * vec_dim), dtype=np.uint8)
+    sq_ins = module.CompressResidualCode(centroid_l=centroid_l, cutoff_l=cutoff_l, weight_l=weight_l, n_bit=n_bit)
+    n_val_per_vec = sq_ins.n_val_per_vec
+
+    residual_code_l = np.empty(shape=(n_vec * n_val_per_vec), dtype=np.uint8)
 
     print("compute assignment of centroid vector")
     n_chunk = util.get_n_chunk(base_embedding_dir)
@@ -54,26 +56,21 @@ def compute_assignment(username: str, dataset: str,
 
         vq_code_l_chunk = compress_into_codes(embs=item_vecs_l_chunk, centroid_l_cuda=centroid_l_cuda)
 
-        residual_code_l_chunk, residual_norm_l_chunk = module.compute_residual_code(vec_l=item_vecs_l_chunk,
-                                                             centroid_l=centroid_l, code_l=vq_code_l_chunk.numpy(),
-                                                             cutoff_l=cutoff_l, weight_l=weight_l, n_bit=n_bit)
+        residual_code_l_chunk, = sq_ins.compute_residual_code(vec_l=item_vecs_l_chunk,
+                                                            code_l=vq_code_l_chunk.numpy())
         residual_code_l_chunk = np.array(residual_code_l_chunk, dtype=np.uint8)
-        residual_norm_l_chunk = np.array(residual_norm_l_chunk, dtype=np.float32)
 
         vq_code_l[vq_code_offset:vq_code_offset + n_vec_chunk] = vq_code_l_chunk
-        residual_norm_l[vq_code_offset:vq_code_offset + n_vec_chunk] = residual_norm_l_chunk
         vq_code_offset += n_vec_chunk
 
-        residual_code_l[residual_code_offset:residual_code_offset + n_vec_chunk * vec_dim] = residual_code_l_chunk
-        residual_code_offset += n_vec_chunk * vec_dim
+        residual_code_l[residual_code_offset:residual_code_offset + n_vec_chunk * n_val_per_vec] = residual_code_l_chunk
+        residual_code_offset += n_vec_chunk * n_val_per_vec
 
     vq_code_l = np.array(vq_code_l, dtype=np.uint32)
-    residual_norm_l = np.array(residual_norm_l, dtype=np.float32)
     # residual_code_l = np.array(residual_code_l, dtype=np.uint8)
-    assert vq_code_l.shape[0] * centroid_l.shape[1] == residual_code_l.shape[0]
+    assert vq_code_l.shape[0] * n_val_per_vec == residual_code_l.shape[0]
     assert residual_code_l.ndim == 1
-    assert residual_norm_l.shape[0] == n_vec
-    return vq_code_l, residual_code_l, residual_norm_l
+    return vq_code_l, residual_code_l
 
 
 def faiss_kmeans(sample_vecs_l: np.ndarray, n_centroid: int):
@@ -100,10 +97,13 @@ def vq_sq_ivf(username: str, dataset: str, module: object, n_centroid: int, n_bi
     cutoff_l, weight_l = module.compute_quantized_scalar(item_vec_l=sample_vecs_l, centroid_l=centroid_l,
                                                          code_l=sample_code_l,
                                                          n_bit=n_bit)
-    vq_code_l, residual_code_l, residual_norm_l = compute_assignment(username=username, dataset=dataset,
-                                                                     centroid_l=centroid_l, module=module,
-                                                                     cutoff_l=cutoff_l, weight_l=weight_l, n_bit=n_bit,
-                                                                     vec_dim=vec_dim)
+    vq_code_l, residual_code_l = compute_assignment(username=username, dataset=dataset,
+                                                    centroid_l=centroid_l, module=module,
+                                                    cutoff_l=cutoff_l, weight_l=weight_l, n_bit=n_bit,
+                                                    vec_dim=vec_dim)
     centroid_l = np.array(centroid_l, dtype=np.float32)
+    vq_code_l = np.array(vq_code_l, dtype=np.uint32)
+    weight_l = np.array(weight_l, dtype=np.float32)
+    residual_code_l = np.array(residual_code_l, dtype=np.uint8)
 
-    return centroid_l, vq_code_l, weight_l, residual_code_l, residual_norm_l
+    return centroid_l, vq_code_l, weight_l, residual_code_l

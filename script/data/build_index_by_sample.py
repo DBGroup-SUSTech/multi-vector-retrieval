@@ -242,7 +242,7 @@ if __name__ == '__main__':
     # 'centroid_score_threshold': searcher.config.centroid_score_threshold
     config_l = {
         'dbg': {
-            'username': 'username2',
+            'username': 'zhengbian',
             'topk_l': [10],
             'retrieval_parameter_l': [
                 {'ndocs': 4, 'ncells': 1, 'centroid_score_threshold': 0.5, "n_thread": 16},
@@ -268,7 +268,7 @@ if __name__ == '__main__':
             ]
         },
         'local': {
-            'username': 'username1',
+            'username': 'bianzheng',
             'topk_l': [10, 50],
             'retrieval_parameter_l': [
                 # {'ndocs': 10, 'ncells': 3, 'centroid_score_threshold': 0.5, "n_thread": 1},

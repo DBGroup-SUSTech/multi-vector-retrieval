@@ -256,7 +256,7 @@ def build_index(username: str, dataset: str, n_centroid: int, pq_n_partition: in
 
 
 if __name__ == '__main__':
-    username = 'username1'
+    username = 'bianzheng'
     dataset = 'lotte-500-gnd'
     n_centroid = 2 ** 10
     pq_n_partition = 16  # specify the number of partitions of vec_dim

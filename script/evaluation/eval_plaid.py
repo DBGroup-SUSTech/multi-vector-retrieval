@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # 'centroid_score_threshold': searcher.config.centroid_score_threshold
     config_l = {
         'dbg': {
-            'username': 'username2',
+            'username': 'zhengbian',
             # 'dataset_l': ['lotte', 'msmacro'],
             # 'dataset_l': ['lotte-lifestyle', 'lotte', 'msmacro'],
             # 'dataset_l': ['quora'],
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             }
         },
         'local': {
-            'username': 'username1',
+            'username': 'bianzheng',
             'dataset_l': ['lotte-500-gnd'],
             'topk_l': [10],
             'retrieval_parameter_l': [

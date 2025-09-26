@@ -70,7 +70,7 @@ class Searcher:
         start = time.time()
         Q = self.encode(queries_)
         encode_time = time.time() - start
-        # # @username1
+        # # @bianzheng
         # import numpy as np
         # numpy_32 = Q.numpy().astype("float32")
         # np.save('./embedding_vector/query_embedding.npy', numpy_32)
@@ -123,7 +123,7 @@ class Searcher:
             Q = self.encode([query])
             end = time.time_ns()
             encode_time = (end - start) * 1e-6
-            # # @username1
+            # # @bianzheng
             # import numpy as np
             # numpy_32 = Q.numpy().astype("float32")
             # np.save('./embedding_vector/query_embedding.npy', numpy_32)
@@ -172,7 +172,7 @@ class Searcher:
         #
         # Q = self.encode(queries_)
 
-        # @username1
+        # @bianzheng
         import numpy as np
         query_emb = np.load(query_embd_filename)
         # query_len = self.config.query_maxlen
@@ -190,7 +190,7 @@ class Searcher:
         #
         # Q = self.encode(queries_)
 
-        # @username1
+        # @bianzheng
         # query_len = self.config.query_maxlen
         # assert query_emb.shape[1] == query_len
         query_emb = torch.Tensor(query_emb)
@@ -248,7 +248,7 @@ class Searcher:
         queries_ = list(queries.values())
 
         Q = self.encode(queries_)
-        # @username1
+        # @bianzheng
 
         numpy_32 = Q.cpu().numpy().astype("float32")
         end_time = time.time_ns()
@@ -276,7 +276,7 @@ class Searcher:
         checkpoint_cpu = self.checkpoint.to('cpu')
         start_time = time.time()
         Q = checkpoint_cpu.queryFromText(queries, bsize=bsize, to_cpu=True)
-        # @username1
+        # @bianzheng
         end_time = time.time()
 
         numpy_32 = Q.cpu().numpy().astype("float32")

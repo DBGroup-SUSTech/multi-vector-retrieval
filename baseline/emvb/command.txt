@@ -1,11 +1,11 @@
 ./build/perf_emvb -k 10 -nprobe 4 -thresh 0.4 -out-second-stage 50 -thresh-query 0.5 \
-  -n-doc-to-score 100 -queries-id-file /home/username1/emvb-fork/index/qid.txt  \
-  -alldoclens-path /home/username1/Dataset/multi-vector-retrieval/Embedding/lotte-500-gnd/doclens.npy \
-  -index-dir-path /home/username1/emvb-fork/index/lotte-500-gnd -out-file results_10_lotte.tsv
+  -n-doc-to-score 100 -queries-id-file /home/bianzheng/emvb-fork/index/qid.txt  \
+  -alldoclens-path /home/bianzheng/Dataset/multi-vector-retrieval/Embedding/lotte-500-gnd/doclens.npy \
+  -index-dir-path /home/bianzheng/emvb-fork/index/lotte-500-gnd -out-file results_10_lotte.tsv
 
 
-/home/username1/emvb-fork/index/qid.txt
+/home/bianzheng/emvb-fork/index/qid.txt
 
-/home/username1/Dataset/multi-vector-retrieval/Embedding/lotte-500-gnd/doclens.npy
+/home/bianzheng/Dataset/multi-vector-retrieval/Embedding/lotte-500-gnd/doclens.npy
 
-/home/username1/emvb-fork/index/lotte-500-gnd/
+/home/bianzheng/emvb-fork/index/lotte-500-gnd/

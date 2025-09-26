@@ -8,7 +8,7 @@
 #include <spdlog/spdlog.h>
 #include <fstream>
 
-#include "include/alg/refine/ResidualScalarQuantization.hpp"
+#include "include/alg/refine/ResidualScalarQuantizationPack.hpp"
 #include "include/alg/probe/IGP/IGPAlg.hpp"
 #include "include/alg/Distance.hpp"
 
@@ -34,14 +34,21 @@ namespace VectorSetSearch::Method
         std::vector<float> _centroid_l; // _n_centroid * vec_dim
         std::vector<uint32_t> _code_l; // n_vecs
 
+        pyarray_uint8 residual_code_l_py_;
+        const uint8_t* residual_code_l_;
+
+        pyarray_float weight_l_py_;
+        const float* weight_l_;
+        uint32_t n_weight_{}, n_bit_{};
+
         IGPAlg filter_ins_;
 
-        ResidualCode residual_code_;
+        ResidualCodePack residual_code_;
 
         IGP() = default;
 
         IGP(const std::vector<uint32_t>& item_n_vecs_l,
-            const uint32_t& n_item, const uint32_t& vec_dim, const uint32_t& n_centroid)
+            const uint32_t& n_item, const uint32_t& vec_dim, const uint32_t& n_centroid, const uint32_t n_bit)
         {
             _n_item = n_item;
             _vec_dim = vec_dim;
@@ -62,13 +69,14 @@ namespace VectorSetSearch::Method
             _n_vecs = n_vecs;
 
             _n_centroid = n_centroid;
+            n_bit_ = n_bit;
             _centroid2itemID_l.resize(_n_centroid);
             _centroid_l.resize(_n_centroid * _vec_dim);
             _code_l.resize(_n_vecs);
         }
 
-        bool buildIndex(const pyarray_float& centroid_l_py, const pyarray_uint32& code_l_py,
-                        const pyarray_float& weight_l_py, pyarray_uint8& residual_code_l_py)
+        bool loadQuantizationIndex(const pyarray_float& centroid_l_py, const pyarray_uint32& code_l_py,
+                                   pyarray_float& weight_l_py, pyarray_uint8& residual_code_l_py)
         {
             if (centroid_l_py.ndim() != 2)
                 throw std::runtime_error("codebook should be 2D array");
@@ -120,17 +128,51 @@ namespace VectorSetSearch::Method
             }
             assert(n_element >= _n_item);
 #endif
+            size_t n_ele_ivf = 0;
+            for (uint32_t centID = 0; centID < _n_centroid; centID++)
+            {
+                n_ele_ivf += _centroid2itemID_l[centID].size();
+            }
+            spdlog::info("n_ele_ivf={}, average n_ele in ivf {:.3f}", n_ele_ivf, 1.0 * n_ele_ivf / _n_centroid);
+
+            residual_code_l_py_ = std::move(residual_code_l_py);
+            residual_code_l_ = residual_code_l_py_.data();
+            constexpr uint32_t n_bit_per_byte = 8;
+            const uint32_t n_val_per_byte = n_bit_per_byte / n_bit_;
+            assert(n_bit_per_byte % n_bit_ == 0);
+            const uint32_t n_packed_val_per_vec = (_vec_dim + n_val_per_byte - 1) / n_val_per_byte;
+            assert(residual_code_l_py_.shape(0) == (size_t) _n_vecs * n_packed_val_per_vec);
+
+            weight_l_py_ = std::move(weight_l_py);
+            weight_l_ = weight_l_py_.data();
+            n_weight_ = weight_l_py_.shape(0);
+            assert(n_weight_ == (1 << n_bit_));
 
             filter_ins_ = IGPAlg(_centroid2itemID_l.data(),
                                  _centroid_l.data(),
                                  _n_item, _n_vecs,
                                  _n_centroid, _vec_dim);
 
-            residual_code_ = ResidualCode(residual_code_l_py, weight_l_py,
-                                          _item_n_vecs_l.data(), _item_n_vecs_offset_l.data(),
-                                          _centroid_l.data(), _code_l.data(),
-                                          _n_item, _n_vecs, _vec_dim);
+            residual_code_ = ResidualCodePack(residual_code_l_, weight_l_,
+                                              _item_n_vecs_l.data(), _item_n_vecs_offset_l.data(),
+                                              _centroid_l.data(), _code_l.data(),
+                                              n_weight_, _n_item, _n_vecs, _vec_dim, n_bit_);
             return true;
+        }
+
+        void buildGraphIndex()
+        {
+            filter_ins_.build_graph_index();
+        }
+
+        void saveGraphIndex(const std::string& filename)
+        {
+            filter_ins_.save_graph_index(filename);
+        }
+
+        void loadGraphIndex(const std::string& filename)
+        {
+            filter_ins_.load_graph_index(filename);
         }
 
         py::tuple search(const vector_set_list& qry_embeddings, const uint32_t topk,
@@ -159,7 +201,7 @@ namespace VectorSetSearch::Method
             const uint32_t addition_search_size = 8;
 
             size_t n_total_item_cls = 0;
-            for(uint32_t centID=0;centID < _n_centroid;centID++)
+            for (uint32_t centID = 0; centID < _n_centroid; centID++)
             {
                 n_total_item_cls += _centroid2itemID_l[centID].size();
             }
