@@ -92,7 +92,7 @@ endif ()
 #include_directories(deps/eigen)
 #include_directories(deps/cereal/include)
 
-#set(Eigen3_DIR /home/zhengbian/software/eigen3_install/share/eigen3/cmake)
+#set(Eigen3_DIR /home/username1/software/eigen3_install/share/eigen3/cmake)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 #find_package(Threads REQUIRED)
@@ -108,10 +108,10 @@ set(BUILD_BFLOAT16 ON)
 #message(${Torch_DIR})
 #find_package(Torch REQUIRED)
 
-#set(spdlog_DIR /home/zhengbian/software/spdlog_install/usr/local/lib/cmake/spdlog)
+#set(spdlog_DIR /home/username1/software/spdlog_install/usr/local/lib/cmake/spdlog)
 find_package(spdlog REQUIRED)
 
-#set(Parlay_DIR /home/zhengbian/software/parlaylib_install/share/parlay/cmake)
+#set(Parlay_DIR /home/username1/software/parlaylib_install/share/parlay/cmake)
 find_package(Parlay REQUIRED)
 
 #set(MKL_DIR ${PROJECT_SOURCE_DIR}/cmake)
@@ -121,7 +121,7 @@ find_package(Parlay REQUIRED)
 
 # Source dependencies
 find_package(Python COMPONENTS Interpreter Development REQUIRED)
-set(pybind11_DIR /home/zhengbian/software/pybind11_install/usr/local/share/cmake/pybind11)
+set(pybind11_DIR /home/username1/software/pybind11_install/usr/local/share/cmake/pybind11)
 find_package(pybind11)
 
 set(ZLIB_LIBRARY /usr/lib/x86_64-linux-gnu/libz.so)
@@ -159,7 +159,7 @@ if (USE_CUDA)
 #        set(CMAKE_CUDA_COMPILER /usr/local/cuda-11.7/bin/nvcc)
 #    set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.2/bin/nvcc)
             set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.6/bin/nvcc)
-    #    set(CMAKE_CUDA_COMPILER /home/zhengbian/software/anaconda3/envs/sim_search/bin/nvcc)
+    #    set(CMAKE_CUDA_COMPILER /home/username1/software/anaconda3/envs/sim_search/bin/nvcc)
     #        set(CMAKE_CUDA_COMPILER /usr/local/cuda-11.8/bin/nvcc)
     #            set(CMAKE_CUDA_COMPILER /usr/bin/nvcc)
 
@@ -173,16 +173,16 @@ if (USE_CUDA)
 
     #        set(Thrust_DIR /usr/include/thrust)
     #    set(Thrust_DIR /mnt/c/ProgramData/Anaconda3/lib/cmake/thrust)
-    set(Thrust_DIR /home/bianzheng/software/thrust/thrust/cmake)
-    set(libcudacxx_DIR /home/bianzheng/software/libcudacxx/lib/cmake/libcudacxx)
-    set(CUB_DIR /home/bianzheng/software/cub/cub/cmake)
+    set(Thrust_DIR /home/username2/software/thrust/thrust/cmake)
+    set(libcudacxx_DIR /home/username2/software/libcudacxx/lib/cmake/libcudacxx)
+    set(CUB_DIR /home/username2/software/cub/cub/cmake)
     find_package(Thrust REQUIRED CONFIG)
     thrust_create_target(Thrust)
 
 
     set_source_files_properties(src/app/BruteForceProgressive.cpp PROPERTIES LANGUAGE CUDA)
     pybind11_add_module(BruteForceProgressive src/app/BruteForceProgressive.cpp)
-    #    target_include_directories(BruteForceProgressive PRIVATE /home/bianzheng/software/anaconda3/envs/sim_search/include/python3.8)
+    #    target_include_directories(BruteForceProgressive PRIVATE /home/username2/software/anaconda3/envs/sim_search/include/python3.8)
     #    target_include_directories(BruteForceProgressive PRIVATE /usr/include/python3.10/include)
     target_link_libraries(BruteForceProgressive PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen cublas spdlog::spdlog ${OpenBLAS_LIB})
     target_include_directories(BruteForceProgressive PRIVATE ${OpenBLAS_INCLUDE_DIR})

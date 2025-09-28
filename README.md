@@ -34,6 +34,12 @@ Note that you can run the other competitors, to install it, you can refer to the
 - `script/evaluation/eval_muvera.py`,
 - `script/evaluation/build_index.py`
 
+## Prebuilt index
+
+We have prepared the prebuild index of the evaluated dataset, i.e., Quora, LoTTE pooled, MS MARCO and HotpotQA, 
+
+Please refer to https://connectpolyu-my.sharepoint.com/:f:/g/personal/21041743r_connect_polyu_hk/EssXntjqjm5FpHiUlXuMXDUBSiVrPMfhZOTfyzf2mGwgzQ
+
 ## Some tips for library installation:
 
 1. pybind: build file, then make install

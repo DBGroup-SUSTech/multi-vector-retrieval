@@ -1,3 +1,3 @@
-notation @bianzheng
+notation @username2
 colbert/searcher.py line 68-72
 colbert/indexing/collection_indexer.py line 354-361

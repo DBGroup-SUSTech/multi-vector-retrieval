@@ -1,5 +1,5 @@
 //
-// Created by bianzheng on 2023/10/7.
+// Created by username2 on 2023/10/7.
 //
 
 #ifndef VECTORSETSEARCH_UTIL_HPP

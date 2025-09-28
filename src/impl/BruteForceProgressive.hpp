@@ -1,5 +1,5 @@
 //
-// Created by bianzheng on 2023/7/18.
+// Created by username2 on 2023/7/18.
 //
 
 #ifndef VECTORSETSEARCH_BRUTEFORCEPROGRESSIVE_HPP

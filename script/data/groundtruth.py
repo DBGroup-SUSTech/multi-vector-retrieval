@@ -182,7 +182,7 @@ class bcolors:
 
 
 if __name__ == '__main__':
-    username = 'bianzheng'
+    username = 'username2'
     module_name = 'BruteForceProgressive'
     n_batch_read = 2
 

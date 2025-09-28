@@ -29,7 +29,7 @@ class bcolors:
 
 
 if __name__ == '__main__':
-    username = 'bianzheng'
+    username = 'username2'
     topk_l = [10, 100]
     dataset_l = [
         'lotte-500-gnd',

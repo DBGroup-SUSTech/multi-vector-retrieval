@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     config_l = {
         'dbg': {
-            'username': 'zhengbian',
+            'username': 'username1',
             'topk_l': [10, 100, 1000],
             'retrieval_parameter_l': [
                 {'initial_filter_k': 32, "nprobe_query": 1, 'remove_centroid_dupes': True, "n_thread": 1},
@@ -106,7 +106,7 @@ if __name__ == '__main__':
             }
         },
         'local': {
-            'username': 'bianzheng',
+            'username': 'username2',
             'topk_l': [10],
             'retrieval_parameter_l': [
                 {'initial_filter_k': 32, "nprobe_query": 4, 'remove_centroid_dupes': True, "n_thread": 8},

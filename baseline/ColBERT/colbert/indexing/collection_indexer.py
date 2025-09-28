@@ -370,7 +370,7 @@ class CollectionIndexer():
 
                 # BEGIN INSERTED CODE:
                 # FOLDER = < insert your folder here >
-                # @bianzheng
+                # @username2
                 start_time = time.time()
                 if embedding_filename is not None:
                     import numpy as np

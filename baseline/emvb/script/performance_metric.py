@@ -568,7 +568,7 @@ def grid_retrieval_parameter(grid_search_para: dict):
 if __name__ == '__main__':
     config_l = {
         'dbg': {
-            'username': 'zhengbian',
+            'username': 'username1',
             'dataset_l': ['lotte'],
             'topk_l': [10],
             'build_index_parameter_l': [
@@ -587,7 +587,7 @@ if __name__ == '__main__':
             }
         },
         'local': {
-            'username': 'bianzheng',
+            'username': 'username2',
             'dataset_l': ['lotte-500-gnd'],
             'topk_l': [10],
             'build_index_parameter_l': [

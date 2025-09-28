@@ -1,5 +1,5 @@
 //
-// Created by bianzheng on 2024/7/23.
+// Created by username2 on 2024/7/23.
 //
 
 #ifndef VECTORSETSEARCH_MATRIXMULCUBLAS_HPP

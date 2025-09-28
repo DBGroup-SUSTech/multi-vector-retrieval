@@ -1,5 +1,5 @@
 //
-// Created by bianzheng on 2024/2/20.
+// Created by username2 on 2024/2/20.
 //
 
 #ifndef VECTORSETSEARCH_CUDAUTIL_HPP

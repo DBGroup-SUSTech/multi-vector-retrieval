@@ -10,7 +10,7 @@ import os
 import scann
 import json
 
-username = 'bianzheng'
+username = 'username2'
 dataset = 'lotte-small'
 
 dessert_index_path = f'/home/{username}/Dataset/multi-vector-retrieval/Index/{dataset}/dessert'

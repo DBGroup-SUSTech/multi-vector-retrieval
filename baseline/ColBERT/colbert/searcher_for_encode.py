@@ -61,7 +61,7 @@ class Searcher4Encode:
         queries_ = list(queries.values())
 
         Q = self.encode(queries_)
-        # @bianzheng
+        # @username2
 
         numpy_32 = Q.cpu().numpy().astype("float32")
         end_time = time.time_ns()
