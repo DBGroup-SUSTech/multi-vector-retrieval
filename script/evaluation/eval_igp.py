@@ -217,7 +217,7 @@ if __name__ == '__main__':
     for dataset in dataset_l:
         for build_index_config in build_index_parameter_l:
             embedding_dir = f'/home/{username}/Dataset/multi-vector-retrieval/Embedding/{dataset}'
-            vec_dim = np.load(os.path.join(embedding_dir, 'base_embedding', f'encoding0_float32.npy')).shape[1]
+            vec_dim = 128
             n_item = np.load(os.path.join(embedding_dir, f'doclens.npy')).shape[0]
             item_n_vec_l = np.load(os.path.join(embedding_dir, f'doclens.npy')).astype(np.uint32)
             n_vecs = np.sum(item_n_vec_l)
