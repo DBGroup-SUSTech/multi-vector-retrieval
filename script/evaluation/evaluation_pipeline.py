@@ -38,7 +38,7 @@ def approximate_solution_compile_load(username: str, dataset: str, compile_file:
     embedding_dir = f'/home/{username}/Dataset/multi-vector-retrieval/Embedding/{dataset}/'
 
     base_embedding_dir = os.path.join(embedding_dir, 'base_embedding')
-    vec_dim = np.load(os.path.join(base_embedding_dir, f'encoding0_float32.npy')).shape[1]
+    vec_dim = 128
     n_item = np.load(os.path.join(embedding_dir, f'doclens.npy')).shape[0]
     print(f"dataset {dataset}, n_item {n_item}, vec_dim {vec_dim}")
     module = importlib.import_module(module_name)
