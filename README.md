@@ -38,7 +38,7 @@ Note that you can run the other competitors, to install it, you can refer to the
 
 We have prepared the prebuild index of the evaluated dataset, i.e., Quora, LoTTE pooled, MS MARCO and HotpotQA, 
 
-Please refer to https://connectpolyu-my.sharepoint.com/:f:/g/personal/21041743r_connect_polyu_hk/EssXntjqjm5FpHiUlXuMXDUBSiVrPMfhZOTfyzf2mGwgzQ
+Please refer to https://connectpolyu-my.sharepoint.com/:f:/g/personal/21041743r_connect_polyu_hk/ElyiRI2Y0FNPmoP0ecApAUwB3v3gL_aNSHZaIrifCV_jDA
 
 ## Some tips for library installation:
 
