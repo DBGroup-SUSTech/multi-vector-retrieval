@@ -2,8 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/baseline/Dessert/deps/cereal" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/baseline/Dessert/deps/eigen" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/baseline/Dessert/deps/pybind" vcs="Git" />
   </component>
 </project>

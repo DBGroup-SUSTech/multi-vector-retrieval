@@ -1,4 +1,4 @@
-# IGP: Efficient Multi-Vector Retrieval via Proximity Graph Index
+# Multi-Vector Retrieval
 ## Introduction
 This is a fast algorithm for the multi-vector retrieval problem based on ColBERT.
 
@@ -30,8 +30,6 @@ Note that you can run the other competitors, to install it, you can refer to the
 
 - `script/evaluation/eval_dessert.py`, 
 - `script/evaluation/eval_emvb.py`, 
-- `script/evaluation/eval_igp.py`, 
-- `script/evaluation/eval_muvera.py`,
 - `script/evaluation/build_index.py`
 
 ## Prebuilt index

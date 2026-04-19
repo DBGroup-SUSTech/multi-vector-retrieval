@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(*)",
+      "Write(*)",
+      "Update(*)",
+      "WebFetch(*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:okvqa.allenai.org)",
+      "Read(//home/bianzheng/Dataset/multi-vector-retrieval/RawData/lotte/raw_data/lifestyle/**)"
+    ],
+    "deny": [
+      "Bash(sudo *)",
+      "Bash(sudo\t*)"
+    ]
+  }
+}

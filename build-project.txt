@@ -33,5 +33,3 @@ if you find the error `AttributeError: module 'faiss' has no attribute 'Standard
 or find the error about the matrix multiplication for calling the openblas
 then you need to uninstall faiss-gpu in pip version and install the faiss-gpu using conda command
 `pip install faiss-gpu-cu12`
-
-/home/username1/software/anaconda3/envs/sim_search/bin/pip
