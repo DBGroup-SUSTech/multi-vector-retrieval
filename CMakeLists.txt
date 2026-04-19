@@ -66,7 +66,7 @@ if (USE_AVX512)
 
 endif ()
 
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+#find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 #find_package(Threads REQUIRED)
 
@@ -151,7 +151,7 @@ if (USE_CUDA)
     pybind11_add_module(GPGPUBuildIndexPackGPU src/app/build_index/GPGPUBuildIndexPackGPU.cpp)
     #    target_include_directories(GPGPUBuildIndexPackGPU PRIVATE /home/bianzheng/software/anaconda3/envs/sim_search/include/python3.8)
     #    target_include_directories(GPGPUBuildIndexPackGPU PRIVATE /usr/include/python3.10/include)
-    target_link_libraries(GPGPUBuildIndexPackGPU PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen cublas spdlog::spdlog ${OpenBLAS_LIB})
+    target_link_libraries(GPGPUBuildIndexPackGPU PRIVATE OpenMP::OpenMP_CXX cublas spdlog::spdlog ${OpenBLAS_LIB})
     target_include_directories(GPGPUBuildIndexPackGPU PRIVATE ${OpenBLAS_INCLUDE_DIR})
     set_target_properties(GPGPUBuildIndexPackGPU PROPERTIES POSITION_INDEPENDENT_CODE ON)
     set_property(TARGET GPGPUBuildIndexPackGPU PROPERTY CXX_STANDARD "17")
@@ -167,7 +167,7 @@ if (USE_CUDA)
     pybind11_add_module(BruteForceProgressive src/app/BruteForceProgressive.cpp)
     #    target_include_directories(BruteForceProgressive PRIVATE /home/bianzheng/software/anaconda3/envs/sim_search/include/python3.8)
     #    target_include_directories(BruteForceProgressive PRIVATE /usr/include/python3.10/include)
-    target_link_libraries(BruteForceProgressive PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen cublas spdlog::spdlog ${OpenBLAS_LIB})
+    target_link_libraries(BruteForceProgressive PRIVATE OpenMP::OpenMP_CXX cublas spdlog::spdlog ${OpenBLAS_LIB})
     target_include_directories(BruteForceProgressive PRIVATE ${OpenBLAS_INCLUDE_DIR})
     set_target_properties(BruteForceProgressive PROPERTIES POSITION_INDEPENDENT_CODE ON)
     set_property(TARGET BruteForceProgressive PROPERTY CXX_STANDARD "17")
@@ -183,7 +183,7 @@ if (USE_CUDA)
     add_executable(IGPGPUPP src/app/IGPGPUPP.cpp)
     #    target_include_directories(IGPGPUPP PRIVATE /home/bianzheng/software/anaconda3/envs/sim_search/include/python3.8)
     #    target_include_directories(IGPGPUPP PRIVATE /usr/include/python3.10/include)
-    target_link_libraries(IGPGPUPP PRIVATE cnpy OpenMP::OpenMP_CXX Eigen3::Eigen cublas spdlog::spdlog ${OpenBLAS_LIB} cublasLt TBB::tbb)
+    target_link_libraries(IGPGPUPP PRIVATE cnpy OpenMP::OpenMP_CXX cublas spdlog::spdlog ${OpenBLAS_LIB} cublasLt TBB::tbb)
     target_include_directories(IGPGPUPP PRIVATE ${OpenBLAS_INCLUDE_DIR} "${CONDA_ENV_PATH}/include")
     set_target_properties(IGPGPUPP PROPERTIES CXX_STANDARD 17
             CXX_STANDARD_REQUIRED ON
@@ -200,16 +200,16 @@ if (USE_CUDA)
 else () # not use cuda
 
     pybind11_add_module(BruteForceProgressive src/app/BruteForceProgressive.cpp)
-    target_link_libraries(BruteForceProgressive PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen spdlog::spdlog ${OpenBLAS_LIB})
+    target_link_libraries(BruteForceProgressive PRIVATE OpenMP::OpenMP_CXX spdlog::spdlog ${OpenBLAS_LIB})
     target_include_directories(BruteForceProgressive PRIVATE ${OpenBLAS_INCLUDE_DIR})
 
 endif ()
 
 
 pybind11_add_module(BruteForce src/app/BruteForce.cpp)
-target_link_libraries(BruteForce PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen spdlog::spdlog ${OpenBLAS_LIB})
+target_link_libraries(BruteForce PRIVATE OpenMP::OpenMP_CXX spdlog::spdlog ${OpenBLAS_LIB})
 target_include_directories(BruteForce PRIVATE ${OpenBLAS_INCLUDE_DIR})
 
 pybind11_add_module(IGP src/app/IGP.cpp)
-target_link_libraries(IGP PRIVATE OpenMP::OpenMP_CXX Eigen3::Eigen spdlog::spdlog ${OpenBLAS_LIB})
+target_link_libraries(IGP PRIVATE OpenMP::OpenMP_CXX spdlog::spdlog ${OpenBLAS_LIB})
 target_include_directories(IGP PRIVATE ${OpenBLAS_INCLUDE_DIR})

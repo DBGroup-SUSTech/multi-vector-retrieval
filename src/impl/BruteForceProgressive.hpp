@@ -7,7 +7,6 @@
 
 #include <stdexcept>
 #include <cstdint>
-#include <Eigen/Eigen>
 #include <limits>
 #include <queue>
 #include <iostream>
