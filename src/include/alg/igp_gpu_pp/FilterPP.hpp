@@ -5,6 +5,7 @@
 #ifndef FILTERPP_HPP
 #define FILTERPP_HPP
 
+#include <algorithm>
 #include <raft/core/device_resources.hpp>
 #include <raft/matrix/detail/select_k-inl.cuh>
 #include <thrust/unique.h>
@@ -305,7 +306,9 @@ class FilterPP
     // compute the max score
     constexpr uint32_t n_thread_warp = 32;
     // integer multiple of n_thread_warp
-    uint64_t ivf_n_thread = (ivf_info_->max_n_ele_ivf_ + n_thread_warp - 1) / n_thread_warp;
+    // Both kernels stride over the list, so cap the launch without truncating it.
+    uint64_t ivf_n_thread = std::min<uint64_t>(1024,
+        (ivf_info_->max_n_ele_ivf_ + n_thread_warp - 1) / n_thread_warp);
     blockSize = ivf_n_thread;
     gridSize = n_unique_centroid;
     shared_memory_size = sizeof(uint32_t) + sizeof(const uint32_t*);
